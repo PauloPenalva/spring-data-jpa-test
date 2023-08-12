@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.idxtec.entities.Pedido;
 import org.idxtec.entities.PedidoItem;
+import org.idxtec.exceptions.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -47,7 +48,7 @@ public class PedidoController {
     @ResponseStatus(code = HttpStatus.OK)
     public PedidoDto findOne(@PathVariable Long id) {
             Pedido ped = repository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Pedido não encontrado."));
+            .orElseThrow(() -> new NotFoundException("Pedido não encontrado."));
 
             return modelMapper.map(ped, PedidoDto.class);
     }
@@ -65,7 +66,7 @@ public class PedidoController {
     @ResponseStatus(code = HttpStatus.OK)
     public PedidoDto update(@PathVariable Long id, @RequestBody PedidoDto dto) {
         repository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Pedido não encontrado."));
+            .orElseThrow(() -> new NotFoundException("Pedido não encontrado."));
 
         Pedido ped = modelMapper.map(dto, Pedido.class);
         ped.getItens().clear();
@@ -83,7 +84,7 @@ public class PedidoController {
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
          Pedido ped = repository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Pedido não encontrado."));
+            .orElseThrow(() -> new NotFoundException("Pedido não encontrado."));
 
         repository.delete(ped);
     }
