@@ -21,12 +21,12 @@ public class PedidoItemController {
 
     private final ModelMapper modelMapper;
 
-    @GetMapping
-    public List<PedidoItemDto> findAll() {
+    @GetMapping("/{pedidoId}")
+    public List<PedidoItemDto> findAll(@PathVariable("pedidoId") Long pedidoId) {
         
         List<PedidoItemDto> itensDto = new ArrayList<>();
 
-        repository.findAll().forEach(item -> {
+        repository.itensByPedidoId(pedidoId).forEach(item -> {
             PedidoItemDto itemDto = modelMapper.map(item, PedidoItemDto.class);
             itensDto.add(itemDto);
         });
@@ -35,11 +35,11 @@ public class PedidoItemController {
     }
 
 
-    @GetMapping("/busca-pelo-pedido/{pedidoId}")
+    @GetMapping("/join-pedido/{pedidoId}")
     public List<PedidoItemDto2> findAllByPedidoId(@PathVariable("pedidoId") Long pedidoId) {
         List<PedidoItemDto2> itensDto = new ArrayList<>();
 
-        repository.itensByPedidoId(pedidoId).forEach(item -> {
+        repository.itensByPedidoIdJoinPedido(pedidoId).forEach(item -> {
             PedidoItemDto2 itemDto = modelMapper.map(item, PedidoItemDto2.class);
             itensDto.add(itemDto);
         });

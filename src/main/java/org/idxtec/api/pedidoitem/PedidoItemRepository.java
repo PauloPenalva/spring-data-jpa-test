@@ -10,5 +10,9 @@ import org.springframework.data.repository.query.Param;
 public interface PedidoItemRepository extends JpaRepository<PedidoItem, Long> {
     
     @Query("SELECT i FROM PedidoItem i LEFT JOIN FETCH i.pedido WHERE i.pedido.id = :pedidoId")
+    List<PedidoItem> itensByPedidoIdJoinPedido(@Param("pedidoId") Long pedidoId);
+
+
+    @Query("SELECT i FROM PedidoItem i WHERE i.pedido.id = :pedidoId")
     List<PedidoItem> itensByPedidoId(@Param("pedidoId") Long pedidoId);
 }
