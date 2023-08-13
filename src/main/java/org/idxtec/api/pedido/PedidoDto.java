@@ -1,4 +1,4 @@
-package org.idxtec.api;
+package org.idxtec.api.pedido;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
