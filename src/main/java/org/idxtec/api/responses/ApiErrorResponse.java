@@ -1,4 +1,4 @@
-package org.idxtec.responses;
+package org.idxtec.api.responses;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

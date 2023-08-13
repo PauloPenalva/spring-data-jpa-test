@@ -1,4 +1,4 @@
-package org.idxtec.api.pedido;
+package org.idxtec.api.pedidoitem.dtos;
 
 import java.time.LocalDate;
 
@@ -9,11 +9,12 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PedidoListDto {
+public class PedidoDto {
     
     private Long id;
 
     private String numero;
 
     private LocalDate emissao;
+    
 }

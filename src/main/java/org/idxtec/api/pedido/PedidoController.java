@@ -2,10 +2,12 @@ package org.idxtec.api.pedido;
 
 import java.util.List;
 
+import org.idxtec.api.pedido.dtos.PedidoDto;
+import org.idxtec.api.pedido.dtos.PedidoListDto;
+import org.idxtec.api.pedido.mappers.PedidoListMapper;
+import org.idxtec.api.pedido.mappers.PedidoMapper;
+import org.idxtec.domain.pedido.PedidoService;
 import org.idxtec.entities.Pedido;
-import org.idxtec.entities.PedidoItem;
-import org.idxtec.exceptions.NotFoundException;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,69 +25,50 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/pedidos")
 @RequiredArgsConstructor
 public class PedidoController {
-    
-    private final PedidoRepository repository;
 
-    private final ModelMapper modelMapper;
+    private final PedidoService service;
+
+    private final PedidoMapper mapper;
+    private final PedidoListMapper listMapper;
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     public PedidoDto create(@RequestBody PedidoDto dto) {
+        Pedido ped = mapper.toEntity(dto);
+        service.create(ped);
 
-        Pedido ped = modelMapper.map(dto, Pedido.class);
-        ped.getItens().clear();
-
-        dto.getItens().forEach(itemDTO -> {
-            PedidoItem item = modelMapper.map(itemDTO, PedidoItem.class);
-            ped.addPedidoItem(item);
-        });
-
-        return modelMapper.map(repository.save(ped), PedidoDto.class);
+        return mapper.toDto(ped);
     }
-
 
     @GetMapping("{id}")
     @ResponseStatus(code = HttpStatus.OK)
     public PedidoDto findOne(@PathVariable Long id) {
-            Pedido ped = repository.findById(id)
-            .orElseThrow(() -> new NotFoundException("Pedido não encontrado."));
+        Pedido ped = service.findOne(id);
 
-            return modelMapper.map(ped, PedidoDto.class);
+        return mapper.toDto(ped);
     }
 
     @GetMapping
     @ResponseStatus(code = HttpStatus.OK)
     public List<PedidoListDto> findAll() {
-        return repository.findAll()
-            .stream()
-            .map(x -> modelMapper.map(x, PedidoListDto.class))
-            .toList();
+        return service.findAll()
+                .stream()
+                .map(listMapper::toDto)
+                .toList();
     }
 
     @PutMapping("{id}")
     @ResponseStatus(code = HttpStatus.OK)
     public PedidoDto update(@PathVariable Long id, @RequestBody PedidoDto dto) {
-        repository.findById(id)
-            .orElseThrow(() -> new NotFoundException("Pedido não encontrado."));
+        Pedido ped = mapper.toEntity(dto);
 
-        Pedido ped = modelMapper.map(dto, Pedido.class);
-        ped.getItens().clear();
-
-        dto.getItens().forEach(itemDTO -> {
-            PedidoItem item = modelMapper.map(itemDTO, PedidoItem.class);
-            ped.addPedidoItem(item);
-        });
-
-        return modelMapper.map(repository.save(ped), PedidoDto.class);
+        return mapper.toDto(service.update(id, ped));
     }
-
 
     @DeleteMapping("{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
-         Pedido ped = repository.findById(id)
-            .orElseThrow(() -> new NotFoundException("Pedido não encontrado."));
-
-        repository.delete(ped);
+        service.delete(id);
     }
+
 }

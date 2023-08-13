@@ -1,4 +1,4 @@
-package org.idxtec.api.pedido;
+package org.idxtec.domain.pedido;
 
 import org.idxtec.entities.Pedido;
 import org.springframework.data.jpa.repository.JpaRepository;

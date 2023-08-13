@@ -3,8 +3,11 @@ package org.idxtec.api.pedidoitem;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.idxtec.api.pedido.PedidoItemDto;
-import org.modelmapper.ModelMapper;
+import org.idxtec.api.pedidoitem.dtos.PedidoItemDto;
+import org.idxtec.api.pedidoitem.dtos.PedidoItemItemDto;
+import org.idxtec.api.pedidoitem.mappers.PedidoItemItemMapper;
+import org.idxtec.api.pedidoitem.mappers.PedidoItemMapper;
+import org.idxtec.domain.pedidoitem.PedidoItemService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,17 +20,18 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PedidoItemController {
     
-    private final PedidoItemRepository repository;
+    private final PedidoItemService service;
 
-    private final ModelMapper modelMapper;
+    private final PedidoItemMapper mapper;
+    private final PedidoItemItemMapper itemMapper;
 
     @GetMapping("/{pedidoId}")
-    public List<PedidoItemDto> findAll(@PathVariable("pedidoId") Long pedidoId) {
+    public List<PedidoItemItemDto> findAllByPedidoId(@PathVariable("pedidoId") Long pedidoId) {
         
-        List<PedidoItemDto> itensDto = new ArrayList<>();
+        List<PedidoItemItemDto> itensDto = new ArrayList<>();
 
-        repository.itensByPedidoId(pedidoId).forEach(item -> {
-            PedidoItemDto itemDto = modelMapper.map(item, PedidoItemDto.class);
+        service.findAllByPedidoId(pedidoId).forEach(item -> {
+            PedidoItemItemDto itemDto = itemMapper.toDto(item);
             itensDto.add(itemDto);
         });
 
@@ -36,11 +40,11 @@ public class PedidoItemController {
 
 
     @GetMapping("/join-pedido/{pedidoId}")
-    public List<PedidoItemDto2> findAllByPedidoId(@PathVariable("pedidoId") Long pedidoId) {
-        List<PedidoItemDto2> itensDto = new ArrayList<>();
+    public List<PedidoItemDto> findAllByPedidoIdWithAssociations(@PathVariable("pedidoId") Long pedidoId) {
+        List<PedidoItemDto> itensDto = new ArrayList<>();
 
-        repository.itensByPedidoIdJoinPedido(pedidoId).forEach(item -> {
-            PedidoItemDto2 itemDto = modelMapper.map(item, PedidoItemDto2.class);
+        service.findAllByPedidoIdWithAssociations(pedidoId).forEach(item -> {
+            PedidoItemDto itemDto = mapper.toDto(item);
             itensDto.add(itemDto);
         });
 

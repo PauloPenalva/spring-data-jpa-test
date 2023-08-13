@@ -1,4 +1,4 @@
-package org.idxtec.api.pedidoitem;
+package org.idxtec.api.pedido.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PedidoItemDto2 {
+public class PedidoItemDto {
 
     private Long id;
 
@@ -19,6 +19,6 @@ public class PedidoItemDto2 {
 
     private Double total;
 
-    private PedidoDto2 pedido;
+    private Long pedidoId;
 
 }

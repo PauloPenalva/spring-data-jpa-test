@@ -1,7 +1,7 @@
 package org.idxtec.api;
 
+import org.idxtec.api.responses.ApiErrorResponse;
 import org.idxtec.exceptions.NotFoundException;
-import org.idxtec.responses.ApiErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
