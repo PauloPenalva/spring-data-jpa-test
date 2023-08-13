@@ -46,4 +46,15 @@ public class PedidoService {
 
         repository.delete(ped);
     }
+
+    public Pedido findByPedidoId(Long id) {
+        PedidoResult ped = repository.findByPedidoIdProjection(id);
+
+        Pedido pedido = new Pedido();
+        pedido.setId(ped.getId());
+        pedido.setEmissao(ped.getEmissao());
+        pedido.setNumero(ped.getNumero());
+
+        return pedido;
+    }
 }

@@ -48,6 +48,14 @@ public class PedidoController {
         return mapper.toDto(ped);
     }
 
+    @GetMapping("/pedido/{id}")
+    @ResponseStatus(code = HttpStatus.OK)
+    public PedidoDto findByPedidoId(@PathVariable Long id) {
+        Pedido ped = service.findByPedidoId(id);
+
+        return mapper.toDto(ped);
+    }
+
     @GetMapping
     @ResponseStatus(code = HttpStatus.OK)
     public List<PedidoListDto> findAll() {
